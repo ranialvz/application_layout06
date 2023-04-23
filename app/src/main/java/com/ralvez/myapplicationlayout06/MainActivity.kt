@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {   lateinit var binding: ActivityMainB
         val numberTextView: TextView = binding.textView2
         viewModel.number.observe(this, { MyDataTest.myUpdate=it })
         //numberTextView.text = it.toString()
-        //viewModel.loadSwitch()
+        viewModel.loadSwitch()
 
         var test1 = MyDataTest.myUpdate
 
