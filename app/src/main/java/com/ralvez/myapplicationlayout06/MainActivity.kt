@@ -1,11 +1,15 @@
 package com.ralvez.myapplicationlayout06
 
 import android.app.AlertDialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,9 +19,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ralvez.myapplicationlayout06.databinding.ActivityMainBinding
 var price = 0
 
-class MainActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
+class MainActivity : AppCompatActivity() {   lateinit var binding: ActivityMainBinding
+    private lateinit var viewModel: MyViewModel
     var myData = MyDataTest.myDataList
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -25,23 +30,46 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
+        lifecycle.addObserver(MyObserver())
 
-        MyDataTest.test1()
-        val myAdapter = MyAdapter(myData)
+
+
+
+
+
+        viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+        val numberTextView: TextView = binding.textView2
+        viewModel.number.observe(this, { MyDataTest.myUpdate=it })
+        //numberTextView.text = it.toString()
+        viewModel.loadSwitch()
+        var test2 = MyDataTest.myUpdate
+        Toast.makeText(this, "$test2 ", Toast.LENGTH_SHORT).show()
+
+
+
+        val myAdapter=  ItemAdapter(myData) { position ->
+            MyDataTest.myItemSelected=position
+            val intent = Intent(this, InventActivity::class.java)
+            startActivity(intent)
+        }
 
         val recyclerView: RecyclerView = binding.rvBooklist
         recyclerView.adapter = myAdapter
         binding.rvBooklist.layoutManager = LinearLayoutManager(this)
 
 
+        if(test2==0){
+            MyDataTest.test1()
 
+            binding.rvBooklist.layoutManager = LinearLayoutManager(this)
+        }
 
         //myAdapter.notifyDataSetChanged()
 
 
         binding.btnAddlist.setOnClickListener {
             showAddItemDialog()
-            // binding.textView2.text= mydata.toString()
+            //binding.textView2.text= mydata.toString()
 
         }
 
@@ -110,7 +138,8 @@ class MainActivity : AppCompatActivity() {
         dialog.show()
     }
 
-
-
-
+    override fun onResume() {
+        super.onResume()
+        binding.rvBooklist.layoutManager = LinearLayoutManager(this)
+    }
 }
