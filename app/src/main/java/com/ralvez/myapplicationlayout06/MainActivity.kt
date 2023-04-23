@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
+import com.google.android.material.snackbar.Snackbar
 
 
 import com.ralvez.myapplicationlayout06.databinding.ActivityMainBinding
@@ -30,8 +30,9 @@ class MainActivity : AppCompatActivity() {   lateinit var binding: ActivityMainB
         setContentView(binding.root)
 
 
-        lifecycle.addObserver(MyObserver())
-
+        lifecycle.addObserver(MyLifecycleObserver())
+        Snackbar.make(binding.root, "${MyDataTest.myLife}", 5000).setAction("EVENT"){}.show()
+        MyDataTest.myLife.clear()
 
 
 
@@ -41,9 +42,9 @@ class MainActivity : AppCompatActivity() {   lateinit var binding: ActivityMainB
         val numberTextView: TextView = binding.textView2
         viewModel.number.observe(this, { MyDataTest.myUpdate=it })
         //numberTextView.text = it.toString()
-        viewModel.loadSwitch()
-        var test2 = MyDataTest.myUpdate
-        Toast.makeText(this, "$test2 ", Toast.LENGTH_SHORT).show()
+        //viewModel.loadSwitch()
+
+        var test1 = MyDataTest.myUpdate
 
 
 
@@ -58,7 +59,7 @@ class MainActivity : AppCompatActivity() {   lateinit var binding: ActivityMainB
         binding.rvBooklist.layoutManager = LinearLayoutManager(this)
 
 
-        if(test2==0){
+        if(test1==0){
             MyDataTest.test1()
 
             binding.rvBooklist.layoutManager = LinearLayoutManager(this)
@@ -72,8 +73,6 @@ class MainActivity : AppCompatActivity() {   lateinit var binding: ActivityMainB
             //binding.textView2.text= mydata.toString()
 
         }
-
-
 
         val swipeToDelete = object : SwipeToDelete(){
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -140,6 +139,8 @@ class MainActivity : AppCompatActivity() {   lateinit var binding: ActivityMainB
 
     override fun onResume() {
         super.onResume()
+        Snackbar.make(binding.root, "${MyDataTest.myLife}", 5000).setAction("EVENT"){}.show()
+        MyDataTest.myLife.clear()
         binding.rvBooklist.layoutManager = LinearLayoutManager(this)
     }
 }

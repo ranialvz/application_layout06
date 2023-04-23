@@ -4,6 +4,7 @@ object MyDataTest{
     var myDataList: ArrayList<Item> = ArrayList()
     var myItemSelected: Int = 0
     var myUpdate: Int = 0
+    var myLife: ArrayList<String> = ArrayList()
 
     fun test1(){
         myDataList.add(Item("Apple", 10))

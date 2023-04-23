@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.widget.EditText
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.ralvez.myapplicationlayout06.databinding.ActivityInventBinding
 import com.ralvez.myapplicationlayout06.databinding.ActivityMainBinding
 
@@ -22,13 +23,14 @@ class InventActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        lifecycle.addObserver(MyLifecycleObserver())
+        Snackbar.make(binding.root, "${MyDataTest.myLife}", 5000).setAction("EVENT"){}.show()
+        MyDataTest.myLife.clear()
+
 
         binding.textView2.text= "${itemPosition +1}"
-
         binding.textView4.text= mySelected?.name
-
         binding.textView5.text= mySelected?.price.toString()
-
         binding.btnInvent.setOnClickListener {
             showAddItemDialog()
         }
@@ -107,7 +109,11 @@ class InventActivity : AppCompatActivity() {
 
     }
 
-
+    override fun onResume() {
+        super.onResume()
+        Snackbar.make(binding.root, "${MyDataTest.myLife}", 5000).setAction("EVENT"){}.show()
+        MyDataTest.myLife.clear()
+    }
 
 
 
